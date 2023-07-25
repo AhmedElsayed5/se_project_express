@@ -8,11 +8,11 @@ const handleError = (req, res, error) => {
     });
   } else if (error.name === "CastError") {
     res.status(ERROR_400).send({
-      message: "The request is sent to a none existense resource!",
+      message: "Id is invalid",
     });
   } else if (error.name === "DocumentNotFoundError") {
     res.status(ERROR_404).send({
-      message: "Passed invalid data !",
+      message: "Data is not found !",
     });
   } else {
     res.status(ERROR_500).send({

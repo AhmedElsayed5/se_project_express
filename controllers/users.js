@@ -21,7 +21,7 @@ const createUser = (req, res) => {
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.status(200).send(users))
+    .then((users) => res.send(users))
     .catch((e) => {
       // res.status(500).send({ message: "Error from GetUsers", e });
       handleError(req, res, e);
