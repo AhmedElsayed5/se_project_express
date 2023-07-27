@@ -1,5 +1,5 @@
-const ClothingItem = require("../models/clothingItem.js");
-const { handleError } = require("../utils/config.js");
+const ClothingItem = require("../models/clothingItem");
+const { handleError } = require("../utils/config");
 
 console.log(handleError);
 

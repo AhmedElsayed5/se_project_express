@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
 const { PORT = 3001 } = process.env;
 const app = express();
 
@@ -13,6 +14,7 @@ const connectToMongo = async () => {
 };
 connectToMongo();
 const routes = require("./routes");
+
 app.use(express.json());
 app.use((req, res, next) => {
   req.user = {

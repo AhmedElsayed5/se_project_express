@@ -1,5 +1,5 @@
-const ClothingItem = require("../models/clothingItem.js");
-const { handleError } = require("../utils/config.js");
+const ClothingItem = require("../models/clothingItem");
+const { handleError } = require("../utils/config");
 
 const likeItem = (req, res) => {
   console.log("here");
@@ -7,7 +7,7 @@ const likeItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(
     req.params.id,
     { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
-    { new: true }
+    { new: true },
   )
     .orFail()
     .then((item) => res.status(200).send({ item }))
@@ -21,7 +21,7 @@ const dislikeItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(
     req.params.id,
     { $pull: { likes: req.user._id } }, // remove _id from the array
-    { new: true }
+    { new: true },
   )
     .orFail()
     .then((item) => res.status(200).send({ item }))

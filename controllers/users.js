@@ -1,5 +1,5 @@
-const User = require("../models/user.js");
-const { handleError } = require("../utils/config.js");
+const User = require("../models/user");
+const { handleError } = require("../utils/config");
 
 const createUser = (req, res) => {
   console.log(req);
