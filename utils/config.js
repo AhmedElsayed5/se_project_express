@@ -1,18 +1,22 @@
-const { ERROR_400, ERROR_404, ERROR_500 } = require("./errors");
+const {
+  ERROR_400,
+  ERROR_401,
+  ERROR_403,
+  ERROR_404,
+  ERROR_409,
+  ERROR_500,
+  ERROR_1100,
+} = require("./errors");
 
 const handleError = (req, res, error) => {
-  // console.error(`error is : ${error}`);
-  if (error.name === "ValidationError") {
+  console.error(`error is : ${error}`);
+  if (error.name === "ValidationError" || error.name === "CastError") {
     res.status(ERROR_400).send({
-      message: "Passed invalid data !",
-    });
-  } else if (error.name === "CastError") {
-    res.status(ERROR_400).send({
-      message: "Id is invalid",
+      message: "Invalid Data Input !",
     });
   } else if (error.name === "DocumentNotFoundError") {
     res.status(ERROR_404).send({
-      message: "Data is not found !",
+      message: "Error: Not Found",
     });
   } else {
     res.status(ERROR_500).send({
@@ -21,4 +25,6 @@ const handleError = (req, res, error) => {
   }
 };
 
-module.exports = { handleError };
+const { JWT_SECRET = "supersecrettoken" } = process.env;
+
+module.exports = { handleError, JWT_SECRET };

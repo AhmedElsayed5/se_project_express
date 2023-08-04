@@ -6,11 +6,11 @@ console.log(handleError);
 const createItem = (req, res) => {
   // console.log("here", req);
   console.log(req.body);
-  console.log(req.user._id);
+  console.log(req.body._id);
 
   const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
+  ClothingItem.create({ name, weather, imageUrl, owner: req.body._id })
     .then((data) => {
       res.send(data);
     })
@@ -46,12 +46,20 @@ const getItems = (req, res) => {
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
 
-  console.log(itemId);
-
-  ClothingItem.findByIdAndDelete(itemId)
+  ClothingItem.findById(itemId)
     .orFail()
-    .then((item) => res.status(200).send(item))
+    .then((item) => {
+      // if (String(item.owner) !== req.body._id)
+      // return res
+      //   .status(403)
+      //   .send({ message: "You are not authorized to delete this item" });
+      // else
+      return item.deleteOne().then(() => {
+        res.send({ message: "Item deleted" });
+      });
+    })
     .catch((e) => {
+      console.log(e);
       handleError(req, res, e);
     });
 };

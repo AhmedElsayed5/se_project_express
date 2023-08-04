@@ -6,7 +6,7 @@ const likeItem = (req, res) => {
   console.log(req.params.id);
   ClothingItem.findByIdAndUpdate(
     req.params.id,
-    { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
+    { $addToSet: { likes: req.params._id } }, // add _id to the array if it's not there yet
     { new: true },
   )
     .orFail()
@@ -18,9 +18,10 @@ const likeItem = (req, res) => {
     });
 };
 const dislikeItem = (req, res) => {
+  console.log(req.params.id);
   ClothingItem.findByIdAndUpdate(
     req.params.id,
-    { $pull: { likes: req.user._id } }, // remove _id from the array
+    { $pull: { likes: req.params._id } }, // remove _id from the array
     { new: true },
   )
     .orFail()
