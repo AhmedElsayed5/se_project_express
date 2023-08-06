@@ -1,3 +1,4 @@
+const { ERROR_403 } = require("../utils/errors");
 const ClothingItem = require("../models/clothingItem");
 const { handleError } = require("../utils/config");
 
@@ -6,11 +7,11 @@ console.log(handleError);
 const createItem = (req, res) => {
   // console.log("here", req);
   console.log(req.body);
-  console.log(req.body._id);
+  console.log(req.user._id);
 
   const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageUrl, owner: req.body._id })
+  ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((data) => {
       res.send(data);
     })
@@ -23,25 +24,11 @@ const createItem = (req, res) => {
 
 const getItems = (req, res) => {
   ClothingItem.find({})
-    .then((items) => res.status(200).send(items))
+    .then((items) => res.send(items))
     .catch((e) => {
-      // res.status(500).send({ message: "Error from GetItems", e });
       handleError(req, res, e);
     });
 };
-
-// const updateItem = (req, res) => {
-//   const { itemId } = req.params;
-//   const { imageUrl } = req.body;
-//   console.log(itemId, imageUrl);
-//   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-//     .orFail()
-//     .then((item) => res.status(200).send({ data: item }))
-//     .catch((e) => {
-//       //res.status(500).send({ message: "Error from updateItem", e });
-//       handleError(req, res, e);
-//     });
-// };
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
@@ -49,11 +36,11 @@ const deleteItem = (req, res) => {
   ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
-      // if (String(item.owner) !== req.body._id)
-      // return res
-      //   .status(403)
-      //   .send({ message: "You are not authorized to delete this item" });
-      // else
+      if (String(item.owner) !== req.user._id)
+        return res
+          .status(ERROR_403)
+          .send({ message: "You are not authorized to delete this item" });
+
       return item.deleteOne().then(() => {
         res.send({ message: "Item deleted" });
       });

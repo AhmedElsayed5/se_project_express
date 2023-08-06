@@ -1,11 +1,12 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
+const { ERROR_401 } = require("../utils/errors");
 
 module.exports = (req, res, next) => {
   const auth = req.headers.authorization;
 
-  if (!authorization || !authorization.startsWith("Bearer ")) {
-    return res.status(401).send({ message: "Authorization error" });
+  if (!auth || !auth.startsWith("Bearer ")) {
+    return res.status(ERROR_401).send({ message: "Authorization error" });
   }
 
   const token = auth.replace("Bearer ", "");
@@ -14,10 +15,10 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
-    return res.status(401).send({ message: "Authorization error" });
+    return res.status(ERROR_401).send({ message: "Authorization error" });
   }
 
   req.user = payload;
 
-  next();
+  return next();
 };

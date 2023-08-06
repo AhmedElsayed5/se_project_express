@@ -17,12 +17,7 @@ connectToMongo();
 const routes = require("./routes");
 
 app.use(express.json());
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: "64bdd05d0a611d2e55b1243f", // paste the _id of the test user created in the previous step
-//   };
-//   next();
-// });
+
 app.use(routes);
 
 app.listen(PORT, () => {

@@ -1,12 +1,4 @@
-const {
-  ERROR_400,
-  ERROR_401,
-  ERROR_403,
-  ERROR_404,
-  ERROR_409,
-  ERROR_500,
-  ERROR_1100,
-} = require("./errors");
+const { ERROR_400, ERROR_404, ERROR_500 } = require("./errors");
 
 const handleError = (req, res, error) => {
   console.error(`error is : ${error}`);

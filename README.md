@@ -13,7 +13,7 @@ postman
 
 ## Techniques
 
-I built this project with (model, controller, route) method, where each item has these 3 files, for cleaner code and easier development. I also added a middleware to add user object to each request just for imitating purpses, in the next chapter will add real authentication
+I built this project with (model, controller, route) method, where each item has these 3 files, for cleaner code and easier development. I also added a middleware to add user object to each request, I used JWT tokens and built an auth process to add security features to the application.
 
 I used MongoDB compass to visualize the database
 

@@ -1,7 +1,8 @@
-const User = require("../models/user");
-const { handleError, JWT_SECRET } = require("../utils/config");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+const { handleError, JWT_SECRET } = require("../utils/config");
+const { ERROR_401, ERROR_409 } = require("../utils/errors");
 
 const login = (req, res) => {
   const { email, password } = req.body;
@@ -13,14 +14,14 @@ const login = (req, res) => {
     )
     .catch((err) => {
       console.log(err);
-      return res.status(401).send({ message: "Login failed" });
+      return res.status(ERROR_401).send({ message: "Login failed" });
     });
 };
 
 const getCurrentUser = (req, res) => {
-  User.findById(req.body._id)
+  User.findById(req.user._id)
     .orFail()
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.send(user))
     .catch((e) => handleError(req, res, e));
 };
 
@@ -30,18 +31,19 @@ const createUser = (req, res) => {
 
   const { name, avatar, email, password } = req.body;
 
-  User.findOne({ email }).then((user) => {
-    if (user) return res.status(409).send({ message: "Email already exists" });
+  User.findOne({ email }).then((data) => {
+    if (data)
+      return res.status(ERROR_409).send({ message: "Email already exists" });
     return bcrypt
       .hash(password, 10)
       .then((hash) => User.create({ name, avatar, email, password: hash }))
-      .then((user) => {
+      .then((item) => {
         res.send({
           data: {
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            avatar: user.avatar,
+            _id: item._id,
+            name: item.name,
+            email: item.email,
+            avatar: item.avatar,
           },
         });
       })
@@ -56,7 +58,7 @@ const updateUser = (req, res) => {
   const { name, avatar } = req.body;
 
   User.findByIdAndUpdate(
-    req.body._id,
+    req.user._id,
     { $set: { name, avatar } },
     { new: true, runValidators: true },
   )
@@ -64,32 +66,8 @@ const updateUser = (req, res) => {
     .catch((e) => handleError(req, res, e));
 };
 
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.send(users))
-    .catch((e) => {
-      // res.status(500).send({ message: "Error from GetUsers", e });
-      handleError(req, res, e);
-    });
-};
-
-const getUser = (req, res) => {
-  const { userId } = req.params;
-
-  console.log(userId);
-
-  User.findById(userId)
-    .orFail()
-    .then((user) => res.status(200).send(user))
-    .catch((e) => {
-      // res.status(500).send({ message: "Error from getUser", e });
-      handleError(req, res, e);
-    });
-};
 module.exports = {
   createUser,
-  getUsers,
-  getUser,
   login,
   getCurrentUser,
   updateUser,
