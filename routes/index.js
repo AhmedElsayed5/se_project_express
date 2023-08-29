@@ -6,7 +6,7 @@ const { login, createUser } = require("../controllers/users");
 
 router.use("/items", clothingItem);
 router.use("/users", user);
-router.post("/signin", login);
+router.post("/login", login);
 router.post("/signup", createUser);
 router.use("*", (req, res) => {
   res.status(ERROR_404).send({ message: "Page not found" });
