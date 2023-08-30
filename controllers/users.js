@@ -9,6 +9,12 @@ const login = (req, res) => {
   return User.findUserByCredentials(email, password)
     .then((user) =>
       res.send({
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          avatar: user.avatar,
+        },
         token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" }),
       }),
     )
