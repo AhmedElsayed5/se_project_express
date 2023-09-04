@@ -11,7 +11,7 @@ const createItem = (req, res) => {
 
   const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
+  ClothingItem.create({ name, weather, imageUrl, owner: req.user })
     .then((data) => {
       res.send(data);
     })
@@ -32,11 +32,13 @@ const getItems = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
+  console.log("this is Delete");
+  console.log(itemId);
 
   ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
-      if (String(item.owner) !== req.user._id)
+      if (String(item.owner._id) !== req.user._id)
         return res
           .status(ERROR_403)
           .send({ message: "You are not authorized to delete this item" });
