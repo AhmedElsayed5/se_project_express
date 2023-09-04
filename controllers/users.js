@@ -52,6 +52,7 @@ const createUser = (req, res) => {
             email: item.email,
             avatar: item.avatar,
           },
+          token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" }),
         });
       })
       .catch((e) => {
