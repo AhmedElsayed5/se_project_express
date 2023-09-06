@@ -25,7 +25,6 @@ const login = (req, res) => {
 };
 
 const getCurrentUser = (req, res) => {
-  console.log("you're here");
   User.findById(req.user._id)
     .orFail()
     .then((user) => res.send(user))
@@ -33,9 +32,6 @@ const getCurrentUser = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  console.log(req);
-  console.log(req.body);
-
   const { name, avatar, email, password } = req.body;
 
   User.findOne({ email }).then((data) => {
