@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 const connectToMongo = async () => {
   try {
-    mongoose.connect("mongodb://localhost:27017/wtwr_db");
+    mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
     console.log("connected to DB");
   } catch (error) {
     console.log(error);
