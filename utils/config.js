@@ -1,7 +1,6 @@
 const { ERROR_400, ERROR_404, ERROR_500 } = require("./errors");
 
 const handleError = (req, res, error) => {
-  console.error(`error is : ${error}`);
   if (error.name === "ValidationError" || error.name === "CastError") {
     res.status(ERROR_400).send({
       message: "Invalid Data Input !",
