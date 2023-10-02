@@ -1,30 +1,29 @@
 const ClothingItem = require("../models/clothingItem");
-const { handleError } = require("../utils/config");
+const NotFoundError = require("../errors/NotFoundError");
 
-const likeItem = (req, res) => {
+const likeItem = (req, res, next) => {
   ClothingItem.findByIdAndUpdate(
     req.params.id,
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .orFail()
+    .orFail(() => {
+      throw new NotFoundError("No user with matching ID found");
+    })
     .then((item) => res.send({ item }))
-    .catch((e) => {
-      console.log(e);
-      handleError(req, res, e);
-    });
+    .catch((err) => next(err));
 };
-const dislikeItem = (req, res) => {
+const dislikeItem = (req, res, next) => {
   ClothingItem.findByIdAndUpdate(
     req.params.id,
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .orFail()
+    .orFail(() => {
+      throw new NotFoundError("No user with matching ID found");
+    })
     .then((item) => res.send({ item }))
-    .catch((e) => {
-      handleError(req, res, e);
-    });
+    .catch((err) => next(err));
 };
 
 module.exports = {

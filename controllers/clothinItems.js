@@ -1,47 +1,43 @@
-const { ERROR_403 } = require("../utils/errors");
 const ClothingItem = require("../models/clothingItem");
-const { handleError } = require("../utils/config");
+const NotFoundError = require("../errors/NotFoundError");
+const BadRequestError = require("../errors/BadRequestError");
+const ForbiddenError = require("../errors/ForbiddenError");
 
-const createItem = (req, res) => {
+const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
 
   ClothingItem.create({ name, weather, imageUrl, owner: req.user })
     .then((data) => {
       res.send(data);
     })
-    .catch((e) => {
-      console.error(`error is : ${e}`);
-      // res.status(500).send({ message: "Error from CreateItem", e });
-      handleError(req, res, e);
+    .catch(() => {
+      next(new BadRequestError("Data is not Valid"));
     });
 };
 
-const getItems = (req, res) => {
+const getItems = (req, res, next) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
-    .catch((e) => {
-      handleError(req, res, e);
+    .catch(() => {
+      next(new NotFoundError("No user with matching ID found"));
     });
 };
 
-const deleteItem = (req, res) => {
+const deleteItem = (req, res, next) => {
   const { itemId } = req.params;
 
   ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
       if (String(item.owner._id) !== req.user._id)
-        return res
-          .status(ERROR_403)
-          .send({ message: "You are not authorized to delete this item" });
+        throw new ForbiddenError("You are not authorized to delete this item");
 
       return item.deleteOne().then(() => {
         res.send({ message: "Item deleted" });
       });
     })
-    .catch((e) => {
-      console.log(e);
-      handleError(req, res, e);
+    .catch(() => {
+      next(new BadRequestError("Data is not Valid"));
     });
 };
 

@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const errorHandler = require("./middlewares/error-handler");
+const { errors } = require("celebrate");
 
 const { PORT = 3001 } = process.env;
 const app = express();
@@ -18,6 +19,7 @@ connectToMongo();
 const routes = require("./routes");
 
 app.use(express.json());
+app.use(errors());
 
 app.use(routes);
 app.use(errorHandler);
