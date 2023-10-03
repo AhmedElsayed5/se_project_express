@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const errorHandler = require("./middlewares/error-handler");
 const { errors } = require("celebrate");
+const errorHandler = require("./middlewares/error-handler");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const { PORT = 3001 } = process.env;
 const app = express();
@@ -18,7 +19,9 @@ const connectToMongo = async () => {
 connectToMongo();
 const routes = require("./routes");
 
+app.use(requestLogger);
 app.use(express.json());
+app.use(errorLogger);
 app.use(errors());
 
 app.use(routes);
