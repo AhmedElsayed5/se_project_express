@@ -8,6 +8,13 @@ const validateURL = (value, helpers) => {
   return helpers.error("string.uri");
 };
 
+const validateEmail = (value, helpers) => {
+  if (validator.isEmail(value)) {
+    return value;
+  }
+  return helpers.error("string.uri");
+};
+
 module.exports.validateSignUpBody = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30).messages({
@@ -20,10 +27,15 @@ module.exports.validateSignUpBody = celebrate({
       "string.empty": 'The "avatar" field must be filled in',
       "string.uri": 'the "avatar" field must be a valid url',
     }),
-    email: Joi.string().required().min(2).max(30).messages({
-      "string.empty": 'The "email" field must be filled in',
-      "string.email": 'the "email" field must be a valid url',
-    }),
+    email: Joi.string()
+      .required()
+      .custom(validateEmail)
+      .min(2)
+      .max(30)
+      .messages({
+        "string.empty": 'The "email" field must be filled in',
+        "string.email": 'the "email" field must be a valid url',
+      }),
     password: Joi.string().required().min(2).max(30).messages({
       "string.min": 'The minimum length of the "password" field is 8',
       "string.empty": 'The "password" field must be filled in',
@@ -51,10 +63,15 @@ module.exports.validateCardBody = celebrate({
 
 module.exports.validateLogInBody = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().min(2).max(30).messages({
-      "string.empty": 'The "email" field must be filled in',
-      "string.email": 'the "email" field must be a valid url',
-    }),
+    email: Joi.string()
+      .required()
+      .custom(validateEmail)
+      .min(2)
+      .max(30)
+      .messages({
+        "string.empty": 'The "email" field must be filled in',
+        "string.email": 'the "email" field must be a valid url',
+      }),
 
     password: Joi.string().required().min(2).max(30).messages({
       "string.min": 'The minimum length of the "password" field is 8',
