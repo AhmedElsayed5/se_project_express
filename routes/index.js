@@ -2,7 +2,7 @@ const router = require("express").Router();
 const NotFoundError = require("../errors/NotFoundError");
 const clothingItem = require("./clothingItems");
 const user = require("./users");
-const { login, createUser } = require("../controllers/users");
+const { createUser, signin } = require("../controllers/users");
 const {
   validateSignUpBody,
   validateLogInBody,
@@ -15,7 +15,7 @@ router.get("/crash-test", () => {
     throw new Error("Server will crash now");
   }, 0);
 });
-router.post("/login", validateLogInBody, login);
+router.post("/signin", validateLogInBody, signin);
 router.post("/signup", validateSignUpBody, createUser);
 router.use("*", (req, res, next) => {
   next(new NotFoundError("Page not found"));

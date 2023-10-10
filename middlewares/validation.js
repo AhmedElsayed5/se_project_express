@@ -80,9 +80,18 @@ module.exports.validateLogInBody = celebrate({
   }),
 });
 
-module.exports.validateId = celebrate({
+module.exports.validateItemId = celebrate({
   params: Joi.object().keys({
     itemId: Joi.string().hex().length(24).messages({
+      "string.hex": "'_id' does not use hexadecimal values",
+      "string.length": "'_id' length is not equal to 24",
+    }),
+  }),
+});
+
+module.exports.validateId = celebrate({
+  params: Joi.object().keys({
+    id: Joi.string().hex().length(24).messages({
       "string.hex": "'_id' does not use hexadecimal values",
       "string.length": "'_id' length is not equal to 24",
     }),

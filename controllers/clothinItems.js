@@ -10,16 +10,20 @@ const createItem = (req, res, next) => {
     .then((data) => {
       res.send(data);
     })
-    .catch(() => {
-      next(new BadRequestError("Data is not Valid"));
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        next(new BadRequestError("Data is not Valid"));
+      } else {
+        next(err);
+      }
     });
 };
 
 const getItems = (req, res, next) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
-    .catch(() => {
-      next(new NotFoundError("No user with matching ID found"));
+    .catch((err) => {
+      next(err);
     });
 };
 
@@ -27,7 +31,9 @@ const deleteItem = (req, res, next) => {
   const { itemId } = req.params;
 
   ClothingItem.findById(itemId)
-    .orFail()
+    .orFail(() => {
+      throw new NotFoundError("No user with matching ID found");
+    })
     .then((item) => {
       if (String(item.owner._id) !== req.user._id)
         throw new ForbiddenError("You are not authorized to delete this item");
@@ -36,8 +42,8 @@ const deleteItem = (req, res, next) => {
         res.send({ message: "Item deleted" });
       });
     })
-    .catch(() => {
-      next(new BadRequestError("Data is not Valid"));
+    .catch((err) => {
+      next(err);
     });
 };
 

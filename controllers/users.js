@@ -7,7 +7,7 @@ const ConflictError = require("../errors/ConflictError");
 const BadRequestError = require("../errors/BadRequestError");
 const { JWT_SECRET } = require("../utils/config");
 
-const login = (req, res, next) => {
+const signin = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) =>
@@ -38,28 +38,33 @@ const getCurrentUser = (req, res, next) => {
 const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
-  User.findOne({ email }).then((data) => {
-    if (data) throw new ConflictError("Email already exists");
-    return bcrypt
-      .hash(password, 10)
-      .then((hash) => User.create({ name, avatar, email, password: hash }))
-      .then((item) => {
-        res.send({
-          data: {
-            _id: item._id,
-            name: item.name,
-            email: item.email,
-            avatar: item.avatar,
-          },
-          token: jwt.sign({ _id: item._id }, JWT_SECRET, { expiresIn: "7d" }),
+  User.findOne({ email })
+    .orFail(() => {
+      throw new NotFoundError("No user with matching ID found");
+    })
+    .then((data) => {
+      if (data) throw new ConflictError("Email already exists");
+      return bcrypt
+        .hash(password, 10)
+        .then((hash) => User.create({ name, avatar, email, password: hash }))
+        .then((item) => {
+          res.send({
+            data: {
+              _id: item._id,
+              name: item.name,
+              email: item.email,
+              avatar: item.avatar,
+            },
+            token: jwt.sign({ _id: item._id }, JWT_SECRET, { expiresIn: "7d" }),
+          });
+        })
+        .catch((e) => {
+          if (e.name === "ValidationError")
+            next(new BadRequestError("Data is not Valid"));
+          next(e);
         });
-      })
-      .catch((e) => {
-        if (e.name === "ValidationError")
-          next(new BadRequestError("Data is not Valid"));
-        next(e);
-      });
-  });
+    })
+    .catch((err) => next(err));
 };
 
 const updateUser = (req, res, next) => {
@@ -70,15 +75,20 @@ const updateUser = (req, res, next) => {
     { $set: { name, avatar } },
     { new: true, runValidators: true },
   )
+    .orFail(() => new NotFoundError("No item with matching ID found"))
     .then((item) => res.send({ name: item.name, avatar: item.avatar }))
-    .catch(() => {
-      next(new NotFoundError("No user with matching ID found"));
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        next(new BadRequestError("Data is not Valid"));
+      } else {
+        next(err);
+      }
     });
 };
 
 module.exports = {
   createUser,
-  login,
+  signin,
   getCurrentUser,
   updateUser,
 };
