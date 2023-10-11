@@ -39,9 +39,6 @@ const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
   User.findOne({ email })
-    .orFail(() => {
-      throw new NotFoundError("No user with matching ID found");
-    })
     .then((data) => {
       if (data) throw new ConflictError("Email already exists");
       return bcrypt
