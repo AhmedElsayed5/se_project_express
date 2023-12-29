@@ -4,6 +4,8 @@ weatherapp.chickenkiller.com
 www.weatherapp.chickenkiller.com
 api.weatherapp.chickenkiller.com
 
+needs fixing
+
 # WTWR (What to Wear?): Back End
 
 It's the back-end chapter of this project. We are going to focus on building database that includes users and clothingItems and maintaing a relationship between each other, for example each clothing item has an owner which is a user, users allowed to like or dislike clothingItem
