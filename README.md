@@ -6,6 +6,12 @@ api.weatherapp.chickenkiller.com
 
 update
 update
+update
+update
+update
+update
+update
+update
 
 # WTWR (What to Wear?): Back End
 
