@@ -1,32 +1,26 @@
-# Domain
+# Weather Matching Backend
 
-weatherapp.chickenkiller.com
-www.weatherapp.chickenkiller.com
-api.weatherapp.chickenkiller.com
+### Desciption
 
-update
-update
-update
-update
-update
+- Platform recommend outfit based on weather
+- Responsive Design
+- Used News Api [https://openweathermap.org/current]
+- MERN stack (MongoDB, Express, React, NodeJs]
+- Deployed using GCP (Google cloud Platform)
+- JWS for authorization
 
-# WTWR (What to Wear?): Back End
+## Images
+<img width="1645" alt="Screenshot 2024-01-06 at 6 01 24 AM" src="https://github.com/AhmedElsayed5/se_project_react/assets/46688006/0acca421-54b6-4bef-8a83-381d81f8e814">
+<img width="1645" alt="Screenshot 2024-01-06 at 6 01 57 AM" src="https://github.com/AhmedElsayed5/se_project_react/assets/46688006/e7ee2fd4-85f1-4896-82b3-8fd9b2311ed9">
 
-It's the back-end chapter of this project. We are going to focus on building database that includes users and clothingItems and maintaing a relationship between each other, for example each clothing item has an owner which is a user, users allowed to like or dislike clothingItem
+## Install
+- For required packages check package.json
+- run "npm install"
+- clone frontend at [https://github.com/AhmedElsayed5/se_project_react]
+- run "npm install" on backend branch
+- read scripts in package.json "npm run dev" to run in local machine
 
-## Technologies
-
-nodejs
-express
-linter
-prettier
-mongoosedb
-postman
-
-## Techniques
-
-I built this project with (model, controller, route) method, where each item has these 3 files, for cleaner code and easier development. I also added a middleware to add user object to each request, I used JWT tokens and built an auth process to add security features to the application.
-
-I used MongoDB compass to visualize the database
-
-Used postman to text api requests
+## Future Improvments
+- Building Mobile app
+- Recdommend outfits based on Users favorite Style
+- Gettiing Brands to support the project to show their products
