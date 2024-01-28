@@ -23,4 +23,4 @@
 ## Future Improvments
 - Building Mobile app
 - Recdommend outfits based on Users favorite Style
-- Gettiing Brands to support the project to show their products
+
