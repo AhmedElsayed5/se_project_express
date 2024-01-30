@@ -7,7 +7,7 @@
 - Used News Api [https://openweathermap.org/current]
 - MERN stack (MongoDB, Express, React, NodeJs]
 - Deployed using GCP (Google cloud Platform)
-- JWS for authorization
+
 
 ## Images
 <img width="1645" alt="Screenshot 2024-01-06 at 6 01 24 AM" src="https://github.com/AhmedElsayed5/se_project_react/assets/46688006/0acca421-54b6-4bef-8a83-381d81f8e814">
